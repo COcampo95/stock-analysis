@@ -10,9 +10,76 @@ This project was to refract the Microsoft VBA coding for Steve's parents' annual
 #### VBACode
 Before altering the code, I copied the existing code from the previous macros when calculating the yearValueAnalysis and altered the code to the specifications for this project. Below is the refracted code:
 
-(code)
+ Worksheets(yearValue).Activate
+    
+    'Get the number of rows to loop over
+    RowCount = Cells(Rows.Count, "A").End(xlUp).Row
+    
+    '1a) Create a ticker Index
+    tickerIndex = 0
 
-####Stock Performances 
+    '1b) Create three output arrays
+    
+    Dim tickerVolumes(12) As Long
+    Dim tickerStartingPrices(12) As Single
+    Dim tickerEndingPrices(12) As Single
+    
+    
+    ''2a) Create a for loop to initialize the tickerVolumes to zero.
+    For i = 0 To 11
+        tickerVolumes(i) = 0
+        tickerStartingPrices(i) = 0
+        tickerEndingPrices(i) = 0
+    Next i
+    
+    ''2b) Loop over all the rows in the spreadsheet.
+    For i = 2 To RowCount
+    
+        '3a) Increase volume for current ticker
+        tickerVolumes(tickerIndex) = tickerVolumes(tickerIndex) + Cells(i, 8).Value
+
+        '3b) Check if the current row is the first row with the selected tickerIndex.      'If  Then
+        
+        If Cells(i, 1).Value = tickers(tickerIndex) And Cells(i - 1, 1).Value <> tickers(tickerIndex) Then
+        
+            tickerStartingPrices(tickerIndex) = Cells(i, 6).Value
+        
+        End If
+        
+        'End If
+        
+        '3c) check if the current row is the last row with the selected ticker
+         'If the next row’s ticker doesn’t match, increase the tickerIndex.
+        'If  Then
+            
+        If Cells(i, 1).Value = tickers(tickerIndex) And Cells(i + 1, 1).Value <> tickers(tickerIndex) Then
+        
+            tickerEndingPrices(tickerIndex) = Cells(i, 6).Value
+        
+        End If
+            
+            '3d Increase the tickerIndex.
+            
+        If Cells(i, 1).Value = tickers(tickerIndex) And Cells(i + 1, 1).Value <> tickers(tickerIndex) Then
+            
+            tickerIndex = tickerIndex + 1
+            
+        End If
+            
+            
+        'End If
+    
+Next i
+    
+    '4) Loop through your arrays to output the Ticker, Total Daily Volume, and Return.
+    For i = 0 To 11
+        
+        Worksheets("AllStocksAnalysis").Activate
+       
+    Next i
+    
+
+#### Stock Performances 
 Comparing 2017 and 2018, EMP and RUN continue to perform well in the market. Although they do not yield as high of a return, they continue to do well in a market that saw all other stocks drop in performance. 
 
 ![All Stocks Analysis_2017](https://user-images.githubusercontent.com/105950742/173254351-e9e21b35-374e-4b72-8a9c-ab4cd1372004.png)
@@ -22,7 +89,7 @@ Comparing 2017 and 2018, EMP and RUN continue to perform well in the market. Alt
 
 ### Summary
 
-####Pros and Cons of Refactoring code
+#### Pros and Cons of Refactoring code
 
 The advantages of refactoring code are the is the code is more organized and cleaner. Refactoring the code decreased the macro run time; prior to the changes, the code took about 1 second to run. 
 
